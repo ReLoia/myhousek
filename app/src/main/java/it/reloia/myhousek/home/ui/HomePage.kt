@@ -31,7 +31,7 @@ fun HomePage(navController: NavController, modifier: Modifier = Modifier) {
             Column {
                 /*todo: add current user name*/
                 Text(text = "Buongiorno, ", fontSize = 28.sp)
-                Text(text = "ci sono N attività da fare.", fontSize = 18.sp)
+                Text(text = "ci sono N attività da fare", fontSize = 18.sp)
             }
             Button(onClick = {
                 navController.navigate("tasks")

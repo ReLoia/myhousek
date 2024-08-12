@@ -46,6 +46,8 @@ import androidx.navigation.compose.rememberNavController
 import it.reloia.myhousek.home.ui.HomePage
 import it.reloia.myhousek.profile.ui.ProfileAppBar
 import it.reloia.myhousek.profile.ui.ProfileViewModel
+import it.reloia.myhousek.tasks.ui.TasksAppBar
+import it.reloia.myhousek.tasks.ui.TasksViewModel
 import it.reloia.myhousek.ui.theme.MyhouseKTheme
 
 data class NavBarItem(
@@ -65,6 +67,8 @@ class MainActivity : ComponentActivity() {
             /* TODO: replace with actual image */
             val profileImage = null;
             val profileViewModel = ProfileViewModel()
+            /*tasks*/
+            val tasksViewModel = TasksViewModel()
 
             val navigationItems = listOf(
                 NavBarItem("Tasks", Icons.AutoMirrored.Filled.List, Icons.AutoMirrored.Sharp.List),
@@ -81,6 +85,7 @@ class MainActivity : ComponentActivity() {
                     /*color = MaterialTheme.colorScheme.background,*/
                 ) {
                     Scaffold(
+                        modifier = Modifier.fillMaxSize(),
                         topBar = {
                             when (navigationItems[selectedIndex].title) {
                                 "Home" -> {
@@ -88,6 +93,11 @@ class MainActivity : ComponentActivity() {
                                         userViewModel = profileViewModel,
                                         navController = navController
                                     )
+                                }
+                                "Tasks" -> {
+                                    TasksAppBar(
+                                        tasksViewModel = tasksViewModel,
+                                        navController = navController)
                                 }
                                 else -> {
                                     TopAppBar(
@@ -98,29 +108,6 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             }
-                            /*NavHost(
-                                navController = navController,
-                                startDestination = "home",
-                            ) {
-                                composable("home") {
-                                    ProfileAppBar(
-                                        userViewModel = profileViewModel,
-                                        navController = navController
-                                    )
-                                }
-                                composable("tasks") {
-                                    *//*TodoScreen()*//*
-                                }
-                                composable("manage") {
-                                    *//*ManageScreen()*//*
-                                }
-                            }*/
-                            /*TopAppBar(
-                                title = { Text(stringResource(R.string.home)) },
-                                actions = {
-
-                                }
-                            )*/
                         },
                         bottomBar = {
                             NavigationBar {
