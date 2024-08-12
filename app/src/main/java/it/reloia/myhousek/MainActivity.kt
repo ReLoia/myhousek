@@ -9,6 +9,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -47,6 +48,7 @@ import it.reloia.myhousek.home.ui.HomePage
 import it.reloia.myhousek.profile.ui.ProfileAppBar
 import it.reloia.myhousek.profile.ui.ProfileViewModel
 import it.reloia.myhousek.tasks.ui.TasksAppBar
+import it.reloia.myhousek.tasks.ui.TasksPage
 import it.reloia.myhousek.tasks.ui.TasksViewModel
 import it.reloia.myhousek.ui.theme.MyhouseKTheme
 
@@ -110,7 +112,10 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         bottomBar = {
-                            NavigationBar {
+                            NavigationBar (
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
                                 navigationItems.forEachIndexed { index, item ->
                                     NavigationBarItem(
                                         icon = {
@@ -160,7 +165,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                                 composable("tasks") {
-                                    /*TodoScreen()*/
+                                    TasksPage()
                                 }
                                 composable("manage") {
                                     /*ManageScreen()*/
