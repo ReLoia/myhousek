@@ -29,6 +29,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -75,7 +76,11 @@ class MainActivity : ComponentActivity() {
             val navigationItems = listOf(
                 NavBarItem("Tasks", Icons.AutoMirrored.Filled.List, Icons.AutoMirrored.Sharp.List),
                 NavBarItem("Home", Icons.Default.Home, Icons.Outlined.Home),
-                NavBarItem("Manage", ImageVector.vectorResource(id = R.drawable.baseline_tune_24), ImageVector.vectorResource(id = R.drawable.baseline_tune_24)),
+                NavBarItem(
+                    "Manage",
+                    ImageVector.vectorResource(id = R.drawable.baseline_tune_24),
+                    ImageVector.vectorResource(id = R.drawable.baseline_tune_24)
+                ),
             )
             var selectedIndex by rememberSaveable {
                 mutableIntStateOf(1)
@@ -96,11 +101,14 @@ class MainActivity : ComponentActivity() {
                                         navController = navController
                                     )
                                 }
+
                                 "Tasks" -> {
                                     TasksAppBar(
                                         tasksViewModel = tasksViewModel,
-                                        navController = navController)
+                                        navController = navController
+                                    )
                                 }
+
                                 else -> {
                                     TopAppBar(
                                         title = { Text(text = " ") },
@@ -112,14 +120,17 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         bottomBar = {
-                            NavigationBar (
+                            NavigationBar(
                                 modifier = Modifier
                                     .fillMaxWidth()
                             ) {
                                 navigationItems.forEachIndexed { index, item ->
                                     NavigationBarItem(
                                         icon = {
-                                            Crossfade(targetState = selectedIndex == index, label = "") {
+                                            Crossfade(
+                                                targetState = selectedIndex == index,
+                                                label = ""
+                                            ) {
                                                 Icon(
                                                     imageVector = if (it) item.selectedIcon else item.unselectedIcon,
                                                     contentDescription = item.title,

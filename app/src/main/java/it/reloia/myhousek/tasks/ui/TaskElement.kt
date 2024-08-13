@@ -30,10 +30,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import it.reloia.myhousek.tasks.domain.model.Task
 
 @Composable
-fun TaskElement(modifier: Modifier = Modifier) {
-    var isChecked by remember { mutableStateOf(false) }
+fun TaskElement(
+    task: Task,
+    modifier: Modifier = Modifier
+) {
+    var isChecked by remember { mutableStateOf(task.isCompleted) }
 
     Row (
         modifier = modifier
@@ -46,7 +50,7 @@ fun TaskElement(modifier: Modifier = Modifier) {
 
     ) {
         // TODO: change the colour
-        Text(text = "Task")
+        Text(text = task.title)
         Box(
             modifier = Modifier
                 .size(28.dp)
@@ -73,5 +77,15 @@ fun TaskElement(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun TaskElementPreview() {
-    TaskElement()
+    TaskElement(
+        Task(
+            id = "1",
+            title = "Task 1",
+            description = "Description for Task 1",
+            isCompleted = false,
+            assignedUsers = emptyList(),
+            timestamp = System.currentTimeMillis(),
+            author = "Author"
+        )
+    )
 }

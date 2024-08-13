@@ -34,7 +34,13 @@ fun HomePage(navController: NavController, modifier: Modifier = Modifier) {
                 Text(text = "ci sono N attività da fare", fontSize = 18.sp)
             }
             Button(onClick = {
-                navController.navigate("tasks")
+                navController.navigate("tasks"){
+                    popUpTo(navController.graph.startDestinationId) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
             }) {
                 Text(text = "Vedi")
             }

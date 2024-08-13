@@ -19,7 +19,8 @@ class TasksViewModel : ViewModel() {
                 description = "Description for Task 1",
                 isCompleted = false,
                 assignedUsers = emptyList(),
-                timestamp = System.currentTimeMillis()
+                timestamp = System.currentTimeMillis(),
+                author = "Author"
             ),
             Task(
                 id = "2",
@@ -27,7 +28,8 @@ class TasksViewModel : ViewModel() {
                 description = "Description for Task 2",
                 isCompleted = false,
                 assignedUsers = emptyList(),
-                timestamp = System.currentTimeMillis()
+                timestamp = System.currentTimeMillis(),
+                author = "Author"
             ),
             Task(
                 id = "3",
@@ -35,7 +37,8 @@ class TasksViewModel : ViewModel() {
                 description = "Description for Task 3",
                 isCompleted = false,
                 assignedUsers = emptyList(),
-                timestamp = System.currentTimeMillis()
+                timestamp = System.currentTimeMillis(),
+                author = "Author"
             )
         )
         _tasks.value = tasks
