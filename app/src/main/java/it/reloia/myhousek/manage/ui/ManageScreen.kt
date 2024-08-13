@@ -5,6 +5,8 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import it.reloia.myhousek.R
 import it.reloia.myhousek.manage.ui.domain.model.Alarm
+import it.reloia.myhousek.manage.ui.domain.model.Command
 
 @Composable
 fun ManageScreen(modifier: Modifier = Modifier) {
@@ -77,16 +80,27 @@ fun ManageScreen(modifier: Modifier = Modifier) {
             apiId = "apiId 1"
         ),
     )
+    val commands = listOf(
+        Command(
+            id = "1",
+            name = "Command 1",
+            apiId = "apiId 1",
+            type = "type 1",
+            value = "value 1"
+        ),
+    )
 
     Column (
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
     ) {
-        Text(text = stringResource(R.string.alarms))
+        Text(
+            text = stringResource(R.string.alarms),
+            modifier = Modifier.padding(top = 16.dp)
+        )
         LazyRow (
-            modifier = Modifier
-                .padding(vertical = 8.dp),
+            modifier = Modifier,
             userScrollEnabled = true,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -113,6 +127,40 @@ fun ManageScreen(modifier: Modifier = Modifier) {
                     ) {
                         Text(text = alarm.name, fontSize = 18.sp)
                         Text(text = alarm.apiId, fontSize = 14.sp)
+                    }
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = stringResource(R.string.commands))
+        LazyRow (
+            modifier = Modifier,
+            userScrollEnabled = true,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            items(
+                items = commands,
+                key = { command -> command.id }
+            ) { command ->
+                Card (
+                    modifier = Modifier
+                        .defaultMinSize(minWidth = 90.dp)
+                        .height(90.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .clickable(onClick = {
+                            /* TOOD: */
+                        }),
+
+                ) {
+                    Column (
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        Text(text = command.name, fontSize = 18.sp)
+                        Text(text = command.apiId, fontSize = 14.sp)
                     }
                 }
             }

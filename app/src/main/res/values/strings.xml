@@ -4,4 +4,5 @@
     <string name="tasks">Tasks</string>
     <string name="manage">Manage</string>
     <string name="home">Home</string>
+    <string name="commands">Commands</string>
 </resources>
