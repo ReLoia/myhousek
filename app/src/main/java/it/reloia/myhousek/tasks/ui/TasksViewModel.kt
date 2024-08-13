@@ -50,6 +50,7 @@ class TasksViewModel : ViewModel() {
         assignedUsers: List<String>
     ) {
         // TODO:
+        println("Adding task with title: $title, description: $description, assignedUsers: $assignedUsers")
 
     }
 

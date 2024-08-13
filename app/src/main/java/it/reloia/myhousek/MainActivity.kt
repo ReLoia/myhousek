@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -20,7 +21,9 @@ import androidx.compose.material.icons.automirrored.sharp.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
+import androidx.compose.material3.ChipElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -142,7 +146,8 @@ class MainActivity : ComponentActivity() {
                                     TasksAppBar(
                                         tasksViewModel = tasksViewModel,
                                         navController = navController,
-                                        openAddActivity = openAddTask,
+                                        modalBottomSheetState = modalBottomSheetState,
+                                        openAddTask = openAddTask
                                     )
                                 }
 
@@ -202,32 +207,39 @@ class MainActivity : ComponentActivity() {
                                         .fillMaxWidth()
                                         .padding(horizontal = 16.dp)
                                 ) {
-                                    Row (
+                                    Row(
                                         horizontalArrangement = Arrangement.SpaceBetween,
-                                        modifier = Modifier.fillMaxWidth()
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Text(text = "Create a new task", fontSize = 20.sp)
 
-                                        IconButton(onClick = {
-                                            tasksViewModel.addTask(
-                                                newTaskTitle,
-                                                newTaskDescription,
-                                                newTaskAssignedUsers.split(",")
-                                            )
+                                        AssistChip(onClick = {
+                                            if (newTaskTitle != "" && newTaskDescription != "")
+                                                tasksViewModel.addTask(
+                                                    newTaskTitle,
+                                                    newTaskDescription,
+                                                    newTaskAssignedUsers.split(",")
+                                                )
+                                            else {
+                                                // TODO:
+                                            }
                                             coroutineScope.launch {
                                                 modalBottomSheetState.hide()
+                                                openAddTask.value = false
                                             }
-                                        }) {
+                                        }, label = {
+                                            Text("Add")
+                                        }, leadingIcon = {
                                             Icon(
-                                                imageVector = Icons.AutoMirrored.Filled.Send,
-                                                contentDescription = "Add"
+                                                imageVector = ImageVector.vectorResource(id = R.drawable.baseline_add_task_24),
+                                                contentDescription = "Add",
+                                                modifier = Modifier.size(20.dp)
                                             )
-                                        }
+                                        })
 
                                     }
-                                    Spacer(modifier = Modifier.height(16.dp))
-//                                    title, description, assignedUsers
-//                                    author and timestamp are set automatically
+//                                    Spacer(modifier = Modifier.height(8.dp))
 //                                    TODO: if the user is not logged in, the task is not created
                                     Text(text = "Title")
                                     TextField(
@@ -253,7 +265,7 @@ class MainActivity : ComponentActivity() {
                                         modifier = Modifier.fillMaxWidth(),
                                         placeholder = { Text("renato, rovazzi, ...") }
                                     )
-
+                                    Spacer(modifier = Modifier.height(16.dp))
                                 }
                             }
                         }

@@ -39,7 +39,7 @@ fun TaskElement(
 ) {
     var isChecked by remember { mutableStateOf(task.isCompleted) }
 
-    Row (
+    Row(
         modifier = modifier
             .fillMaxWidth()
             .background(color = Color(0xffD9D9D9), shape = RoundedCornerShape(6.dp))
@@ -48,7 +48,7 @@ fun TaskElement(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
 
-    ) {
+        ) {
         // TODO: change the colour
         Text(text = task.title)
         Box(
