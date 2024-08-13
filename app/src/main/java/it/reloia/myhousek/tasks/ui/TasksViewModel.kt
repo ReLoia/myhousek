@@ -44,9 +44,13 @@ class TasksViewModel : ViewModel() {
         _tasks.value = tasks
     }
 
-    fun addTask(task: Task) {
+    fun addTask(
+        title: String,
+        description: String,
+        assignedUsers: List<String>
+    ) {
         // TODO:
-        _tasks.value = _tasks.value + task
+
     }
 
 }
