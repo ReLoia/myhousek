@@ -1,64 +1,53 @@
 package it.reloia.myhousek.profile.ui
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import android.app.Activity
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import it.reloia.myhousek.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileAppBar(userViewModel: ProfileViewModel, navController: NavController) {
-    val user by userViewModel.user.collectAsState()
+fun ProfileAppBar(
+    modifier: Modifier = Modifier,
+    profileViewModel: ProfileViewModel,
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     TopAppBar(
         title = {
-            Text(stringResource(R.string.home))
+            Text("Tasks")
         },
         actions = {
             IconButton(onClick = {
-                /*todo*/
-                /*navController.navigate("settings")*/
+//                    coroutineScope.launch {
+//                    }
             }) {
                 Icon(
-                    Icons.Default.Settings,
-                    contentDescription = "Settings"
+                    imageVector = ImageVector.vectorResource(id = R.drawable.baseline_logout_24),
+                    contentDescription = "Logout"
                 )
-
             }
-            IconButton(
-                onClick = {
-                    /*todo*/
-                    /*navController.navigate("profile")*/
-                }
-            ) {
-                Image(
-                    painter = if (user?.profileImageUrl != null) {
-                        /*todo*/
-                        painterResource(id = R.drawable.baseline_account_circle_24)
-                        /*painterResource(id = R.drawable.user_profile_image) // Replace with actual image*/
-                    } else {
-                        painterResource(id = R.drawable.baseline_account_circle_24) // Replace with default image
-                    },
-                    contentDescription = "Profile Picture",
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clip(CircleShape)
+
+        },
+        navigationIcon = {
+            IconButton(onClick = {
+                (context as? Activity)?.finish()
+            }) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back"
                 )
             }
         }
