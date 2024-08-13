@@ -5,4 +5,5 @@
     <string name="manage">Manage</string>
     <string name="home">Home</string>
     <string name="commands">Commands</string>
+    <string name="title_activity_other">OtherActivity</string>
 </resources>

@@ -46,7 +46,7 @@ fun TaskElement(
             .padding(horizontal = 8.dp)
             .height(38.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Bottom,
 
         ) {
         // TODO: change the colour
