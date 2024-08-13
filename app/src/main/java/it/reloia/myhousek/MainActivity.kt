@@ -28,6 +28,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -63,12 +64,13 @@ class MainActivity : ComponentActivity() {
             val tasksViewModel = TasksViewModel()
 
             val navigationItems = listOf(
-                NavBarItem("Tasks", Icons.AutoMirrored.Filled.List, Icons.AutoMirrored.Sharp.List),
-                NavBarItem("Home", Icons.Default.Home, Icons.Outlined.Home),
+                NavBarItem(stringResource(R.string.tasks), Icons.AutoMirrored.Filled.List, Icons.AutoMirrored.Sharp.List, "tasks"),
+                NavBarItem(stringResource(R.string.home), Icons.Default.Home, Icons.Outlined.Home, "home"),
                 NavBarItem(
-                    "Manage",
+                    stringResource(R.string.manage),
                     ImageVector.vectorResource(id = R.drawable.baseline_tune_24),
-                    ImageVector.vectorResource(id = R.drawable.baseline_tune_24)
+                    ImageVector.vectorResource(id = R.drawable.baseline_tune_24),
+                    "manage"
                 ),
             )
             var selectedIndex by rememberSaveable {
@@ -78,7 +80,9 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(navController) {
                 navController.currentBackStackEntryFlow.collect { backStackEntry ->
                     val route = backStackEntry.destination.route
-                    selectedIndex = navigationItems.indexOfFirst { it.route == route }
+                    selectedIndex = navigationItems.indexOfFirst { it.route == route }.let {
+                        if (it != -1) it else 1
+                    }
                 }
             }
 

@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">myhouseK</string>
+    <string name="app_name" translatable="false">myhouseK</string>
+    <string name="alarms">Alarms</string>
+    <string name="tasks">Tasks</string>
+    <string name="manage">Manage</string>
     <string name="home">Home</string>
 </resources>

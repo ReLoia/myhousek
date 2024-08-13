@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alarms">Allarmi</string>
+    <string name="tasks">Attività</string>
+    <string name="manage">Gestisci</string>
+    <string name="home">Casa</string>
+</resources>
