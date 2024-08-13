@@ -16,17 +16,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.automirrored.sharp.List
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.AssistChip
-import androidx.compose.material3.Button
-import androidx.compose.material3.ChipElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -56,7 +51,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import it.reloia.myhousek.home.ui.HomeScreen
 import it.reloia.myhousek.manage.ui.ManageScreen
-import it.reloia.myhousek.profile.ui.ProfileAppBar
+import it.reloia.myhousek.home.ui.HomeAppBar
 import it.reloia.myhousek.profile.ui.ProfileViewModel
 import it.reloia.myhousek.tasks.ui.TasksAppBar
 import it.reloia.myhousek.tasks.ui.TasksScreen
@@ -136,7 +131,7 @@ class MainActivity : ComponentActivity() {
                         topBar = {
                             when (navigationItems[selectedIndex].route) {
                                 "home" -> {
-                                    ProfileAppBar(
+                                    HomeAppBar(
                                         userViewModel = profileViewModel,
                                         navController = navController
                                     )
