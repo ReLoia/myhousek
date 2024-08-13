@@ -1,55 +1,44 @@
 package it.reloia.myhousek
 
 import android.os.Bundle
-import android.widget.ImageButton
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.automirrored.sharp.List
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import it.reloia.myhousek.home.ui.HomePage
+import it.reloia.myhousek.home.ui.HomeScreen
+import it.reloia.myhousek.manage.ui.ManageScreen
 import it.reloia.myhousek.profile.ui.ProfileAppBar
 import it.reloia.myhousek.profile.ui.ProfileViewModel
 import it.reloia.myhousek.tasks.ui.TasksAppBar
-import it.reloia.myhousek.tasks.ui.TasksPage
+import it.reloia.myhousek.tasks.ui.TasksScreen
 import it.reloia.myhousek.tasks.ui.TasksViewModel
 import it.reloia.myhousek.ui.theme.MyhouseKTheme
 
@@ -57,7 +46,7 @@ data class NavBarItem(
     val title: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
-    val route: String = title,
+    val route: String = title.lowercase(),
 )
 
 class MainActivity : ComponentActivity() {
@@ -86,6 +75,14 @@ class MainActivity : ComponentActivity() {
                 mutableIntStateOf(1)
             }
 
+            LaunchedEffect(navController) {
+                navController.currentBackStackEntryFlow.collect { backStackEntry ->
+                    val route = backStackEntry.destination.route
+                    selectedIndex = navigationItems.indexOfFirst { it.route == route }
+                }
+            }
+
+
             MyhouseKTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -111,7 +108,7 @@ class MainActivity : ComponentActivity() {
 
                                 else -> {
                                     TopAppBar(
-                                        title = { Text(text = " ") },
+                                        title = { Text(text = navigationItems[selectedIndex].title) },
                                         actions = {
 
                                         }
@@ -168,7 +165,7 @@ class MainActivity : ComponentActivity() {
                                 startDestination = "home",
                             ) {
                                 composable("home") {
-                                    HomePage(
+                                    HomeScreen(
                                         navController,
                                         modifier = Modifier
                                             .fillMaxSize()
@@ -176,10 +173,10 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                                 composable("tasks") {
-                                    TasksPage()
+                                    TasksScreen()
                                 }
                                 composable("manage") {
-                                    /*ManageScreen()*/
+                                    ManageScreen()
                                 }
                             }
                         }

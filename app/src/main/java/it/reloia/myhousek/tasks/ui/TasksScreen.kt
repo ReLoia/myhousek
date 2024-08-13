@@ -1,7 +1,6 @@
 package it.reloia.myhousek.tasks.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,21 +15,15 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import it.reloia.myhousek.tasks.domain.model.Task
 import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TasksPage(modifier: Modifier = Modifier) {
+fun TasksScreen(modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
 
     val tabs = listOf("All", "Pending", "Completed")
