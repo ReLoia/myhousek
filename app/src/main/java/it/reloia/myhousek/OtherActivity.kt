@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,10 +18,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import it.reloia.myhousek.profile.ui.ProfileAppBar
 import it.reloia.myhousek.profile.ui.ProfileScreen
 import it.reloia.myhousek.profile.ui.ProfileViewModel
+import it.reloia.myhousek.settings.ui.SettingsAppBar
 import it.reloia.myhousek.settings.ui.SettingsScreen
 import it.reloia.myhousek.ui.theme.MyhouseKTheme
 
@@ -30,7 +29,7 @@ data class Page(
     val name: String,
     val route: String,
     val content: @Composable () -> Unit,
-    val topBar: @Composable () -> Unit = {}
+    val topBar: @Composable() (() -> Unit)? = null
 )
 
 class OtherActivity : ComponentActivity() {
@@ -43,12 +42,19 @@ class OtherActivity : ComponentActivity() {
 
             val page = intent.getStringExtra("page")
             val pages = listOf(
-                Page(stringResource(R.string.settings), "settings", content = { SettingsScreen() }),
+                Page(stringResource(R.string.settings), "settings", content = { SettingsScreen() }, topBar = { SettingsAppBar() }),
                 Page(
                     stringResource(R.string.profile),
                     "profile",
                     content = { ProfileScreen(profileViewModel = profileViewModel) },
-                    topBar = { ProfileAppBar(profileViewModel = profileViewModel) })
+                    topBar = { ProfileAppBar(profileViewModel = profileViewModel) }),
+                Page(
+                    "test",
+                    "test",
+                    content = {
+                        Text("Test")
+                    }
+                )
             )
             val selectedPage = pages.first { it.route == page }
 
@@ -56,26 +62,46 @@ class OtherActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
-                        when (page) {
-                            "profile" -> {
-                                selectedPage.topBar()
-                            }
-                            else -> {
-                                TopAppBar(
-                                    title = { Text(selectedPage.name) },
-                                    navigationIcon = {
-                                        IconButton(onClick = {
-                                            finish()
-                                        }) {
-                                            Icon(
-                                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                                contentDescription = "Back"
-                                            )
-                                        }
+                        if (selectedPage.topBar != null) {
+                            selectedPage.topBar?.invoke()
+                        } else {
+                            TopAppBar(
+                                title = { Text(selectedPage.name) },
+                                navigationIcon = {
+                                    IconButton(onClick = {
+                                        finish()
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                            contentDescription = "Back"
+                                        )
                                     }
-                                )
-                            }
+                                }
+                            )
                         }
+//                        when (page) {
+//                            "profile" -> {
+//                                selectedPage.topBar()
+//                            }
+//                            "settings" -> {
+//
+//                            }
+//                            else -> {
+//                                TopAppBar(
+//                                    title = { Text(selectedPage.name) },
+//                                    navigationIcon = {
+//                                        IconButton(onClick = {
+//                                            finish()
+//                                        }) {
+//                                            Icon(
+//                                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+//                                                contentDescription = "Back"
+//                                            )
+//                                        }
+//                                    }
+//                                )
+//                            }
+//                        }
                     }
                 ) { padding ->
                     Surface(

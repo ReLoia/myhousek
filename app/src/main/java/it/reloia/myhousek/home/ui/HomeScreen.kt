@@ -36,93 +36,58 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
     ) {
-//        Row(
-//            horizontalArrangement = Arrangement.SpaceBetween,
-//            verticalAlignment = Alignment.CenterVertically,
-//            modifier = Modifier.fillMaxWidth()
-//        ) {
-//            Column {
-//                /*todo: add current user name*/
-//                Text(text = "Buongiorno, ", fontSize = 28.sp)
-//                Text(text = "ci sono N attività da fare", fontSize = 18.sp)
-//            }
-//            Button(onClick = {
-//                navController.navigate("tasks"){
-//                    popUpTo(navController.graph.startDestinationId) {
-//                        saveState = true
-//                    }
-//                    launchSingleTop = true
-//                    restoreState = true
-//                }
-//            }) {
-//                Text(text = "Vedi")
-//            }
-//        }
-        Card (
+        Card(
             modifier = Modifier
                 .padding(horizontal = 12.dp)
                 .fillMaxWidth(),
         ) {
-//            Row (
-//                modifier = Modifier
-//                    .padding(16.dp)
-//                    .fillMaxWidth(),
-//                horizontalArrangement = Arrangement.SpaceBetween,
-//                verticalAlignment = Alignment.CenterVertically,
-//            ) {
-                Column (
+            Column(
+                modifier = Modifier
+                    .padding(
+                        horizontal = 16.dp,
+                    )
+                    .fillMaxWidth(),
+            ) {
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(text = "Buongiorno, ", fontSize = 26.sp)
+//                TODO: change this with a loading API message and
+//                TODO: then load the data
+//                Text(text = "il server si sta avviando...", fontSize = 18.sp)
+                Text(text = "ci sono N attività da fare", fontSize = 18.sp)
+                Spacer(modifier = Modifier.height(10.dp))
+                AssistChip(
+                    onClick = {
+                        navController.navigate("tasks") {
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    label = { Text(text = "vedi le attività") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.List,
+                            contentDescription = "",
+                        )
+                    },
                     modifier = Modifier
-                        .padding(
-                            horizontal = 16.dp,
-                        )
-                        .fillMaxWidth(),
-                ) {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "Buongiorno, ", fontSize = 26.sp)
-                    Text(text = "ci sono N attività da fare", fontSize = 18.sp)
-                    Spacer(modifier = Modifier.height(10.dp))
-//                    Row {
-                        AssistChip(
-                            onClick = {
-                                navController.navigate("tasks"){
-                                    popUpTo(navController.graph.startDestinationId) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
-                            label = { Text(text = "vedi le attività") },
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Default.List,
-                                    contentDescription = "",
-                                )
-                            },
-                            modifier = Modifier
-                                .align(Alignment.End),
-                            colors = AssistChipDefaults.assistChipColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                labelColor = MaterialTheme.colorScheme.onPrimary,
-                                leadingIconContentColor = MaterialTheme.colorScheme.onPrimary
-                            )
-                        )
-//                    }
-                }
-//                FilledIconButton(
-//                    onClick = { /*TODO*/ },
-//                ) {
-//                    Icon(
-//                        imageVector = Icons.AutoMirrored.Default.List,
-//                        contentDescription = "",
-//                    )
-//                }
-//            }
+                        .align(Alignment.End),
+                    colors = AssistChipDefaults.assistChipColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        labelColor = MaterialTheme.colorScheme.onPrimary,
+                        leadingIconContentColor = MaterialTheme.colorScheme.onPrimary
+                    )
+                )
+            }
         }
         Spacer(modifier = Modifier.padding(8.dp))
         Column {
             Text(text = "Attività recenti", fontSize = 22.sp)
             /*todo*/
+//            TODO: remove:
+            Text(text = "Nessuna attività recente", fontSize = 18.sp)
         }
     }
 }
