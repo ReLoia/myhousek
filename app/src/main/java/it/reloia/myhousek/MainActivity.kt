@@ -269,7 +269,6 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(padding),
-
                             ) {
                             NavHost(
                                 navController = navController,

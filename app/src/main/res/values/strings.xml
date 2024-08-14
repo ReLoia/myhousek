@@ -6,4 +6,6 @@
     <string name="home">Home</string>
     <string name="commands">Commands</string>
     <string name="title_activity_other">OtherActivity</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
 </resources>

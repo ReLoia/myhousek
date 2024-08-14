@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import it.reloia.myhousek.profile.ui.ProfileAppBar
 import it.reloia.myhousek.profile.ui.ProfileScreen
@@ -42,9 +43,9 @@ class OtherActivity : ComponentActivity() {
 
             val page = intent.getStringExtra("page")
             val pages = listOf(
-                Page("Settings", "settings", content = { SettingsScreen() }),
+                Page(stringResource(R.string.settings), "settings", content = { SettingsScreen() }),
                 Page(
-                    "Profile",
+                    stringResource(R.string.profile),
                     "profile",
                     content = { ProfileScreen(profileViewModel = profileViewModel) },
                     topBar = { ProfileAppBar(profileViewModel = profileViewModel) })
