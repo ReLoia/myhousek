@@ -4,4 +4,8 @@
     <string name="tasks">Attività</string>
     <string name="manage">Gestisci</string>
     <string name="home">Casa</string>
+    <string name="commands">Comandi</string>
+    <string name="profile">Profilo</string>
+    <string name="settings">Impostazioni</string>
+    <string name="alarms_widget_description">Widget per la gestione degli Allarmi</string>
 </resources>

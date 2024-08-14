@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyhouseK"
         tools:targetApi="31">
+
         <activity
             android:name=".OtherActivity"
             android:exported="false"
@@ -28,6 +29,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".widgets.alarms.AlarmsWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/alarms_widget_receiver_info" />
+        </receiver>
     </application>
 
 </manifest>
