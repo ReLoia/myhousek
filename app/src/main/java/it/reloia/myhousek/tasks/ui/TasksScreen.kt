@@ -15,6 +15,8 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,7 +25,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TasksScreen(modifier: Modifier = Modifier) {
+fun TasksScreen(viewModel: TasksViewModel, modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
 
     val tabs = listOf("All", "Pending", "Completed")
@@ -31,26 +33,8 @@ fun TasksScreen(modifier: Modifier = Modifier) {
     val pagerState = rememberPagerState(pageCount = { tabs.size })
 
 //    TODO: remove
-    val tasks = listOf(
-        Task(
-            id = "1",
-            title = "Task 1",
-            description = "Description for Task 1 Description for Task 1Description for Task 1Description for Task 1Description for Task 1Description for Task 1Description for Task 1Description for Task 1Description for Task 1Description for Task 1Description for Task 1Description for Task 1Description for Task 1Description for Task 1Description for Task 1Description for Task 1Description for Task 1",
-            isCompleted = false,
-            assignedUsers = emptyList(),
-            timestamp = System.currentTimeMillis(),
-            author = "Author"
-        ),
-        Task(
-            id = "2",
-            title = "Task 2",
-            description = "Description for Task 2",
-            isCompleted = true,
-            assignedUsers = emptyList(),
-            timestamp = System.currentTimeMillis(),
-            author = "Author"
-        )
-    )
+    val tasks by viewModel.tasks.collectAsState()
+    print(tasks)
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),

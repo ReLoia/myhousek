@@ -53,11 +53,16 @@ import it.reloia.myhousek.home.ui.HomeScreen
 import it.reloia.myhousek.manage.ui.ManageScreen
 import it.reloia.myhousek.home.ui.HomeAppBar
 import it.reloia.myhousek.profile.ui.ProfileViewModel
+import it.reloia.myhousek.tasks.data.remote.TasksApiService
+import it.reloia.myhousek.tasks.data.remote.TasksRepositoryImpl
 import it.reloia.myhousek.tasks.ui.TasksAppBar
 import it.reloia.myhousek.tasks.ui.TasksScreen
 import it.reloia.myhousek.tasks.ui.TasksViewModel
 import it.reloia.myhousek.ui.theme.MyhouseKTheme
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 data class NavBarItem(
     val title: String,
@@ -77,7 +82,24 @@ class MainActivity : ComponentActivity() {
             val profileImage = null;
             val profileViewModel = ProfileViewModel()
             /*tasks*/
-            val tasksViewModel = TasksViewModel()
+            val httpClient = OkHttpClient.Builder()
+                .addInterceptor {
+                    val request = it.request().newBuilder()
+                        .addHeader("Authorization", "Bearer ${profileViewModel.token}")
+                        .build()
+                    it.proceed(request)
+                }
+
+            val tasksViewModel = TasksViewModel(
+                TasksRepositoryImpl(
+                    Retrofit.Builder()
+                        .baseUrl("https://myhousek-api.onrender.com")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build()
+                        .create(TasksApiService::class.java),
+                    this.application
+                )
+            )
             val openAddTask = remember { mutableStateOf(false) }
             val modalBottomSheetState = rememberModalBottomSheetState()
 
@@ -283,7 +305,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                                 composable("tasks") {
-                                    TasksScreen()
+                                    TasksScreen( tasksViewModel )
                                 }
                                 composable("manage") {
                                     ManageScreen()
