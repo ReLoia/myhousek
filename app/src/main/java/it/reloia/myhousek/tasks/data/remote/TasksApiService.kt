@@ -1,5 +1,6 @@
 package it.reloia.myhousek.tasks.data.remote
 
+import it.reloia.myhousek.tasks.domain.model.CreateTask
 import it.reloia.myhousek.tasks.domain.model.Task
 import retrofit2.http.Body
 import retrofit2.http.Path
@@ -13,7 +14,7 @@ interface TasksApiService {
     suspend fun getTasks(): List<Task>
 
     @POST("tasks")
-    suspend fun addTask(@Body task: Task): Boolean
+    suspend fun addTask(@Body task: CreateTask): Boolean
 
     @PUT("tasks/{id}")
     suspend fun updateTask(@Path("id") id: String): Boolean
