@@ -1,8 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("kotlin-kapt")
-    alias(libs.plugins.google.dagger.hilt.android)
 
 }
 
@@ -74,23 +72,12 @@ dependencies {
 
 //    HTTP Requests
     implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 
-//    Hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.lifecycle.viewmodel)
-    kapt(libs.androidx.hilt.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
 
 //    Glance
     implementation(libs.androidx.glance)
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
 
-
-
-}
-
-kapt {
-    correctErrorTypes = true
 }

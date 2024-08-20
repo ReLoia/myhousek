@@ -2,25 +2,24 @@ package it.reloia.myhousek.tasks.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import it.reloia.myhousek.tasks.data.TasksRepository
 import it.reloia.myhousek.tasks.domain.model.CreateTask
 import it.reloia.myhousek.tasks.domain.model.Task
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class TasksViewModel @Inject constructor(
+class TasksViewModel (
     private val repository: TasksRepository
 ) : ViewModel() {
     private val _tasks = MutableStateFlow<List<Task>>(emptyList())
     val tasks: StateFlow<List<Task>> = _tasks
 
+    init {
+        loadTasks()
+    }
+
     fun loadTasks() {
-        // Simulate a data load
-        // TODO: Replace with your actual data source logic
         viewModelScope.launch {
             _tasks.value = repository.getTasks()
         }
