@@ -17,12 +17,17 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.components.CircleIconButton
 import androidx.glance.appwidget.components.Scaffold
 import androidx.glance.appwidget.components.TitleBar
+import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Row
+import androidx.glance.layout.Spacer
+import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxSize
+import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.width
@@ -31,6 +36,7 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import it.reloia.myhousek.MainActivity
 import it.reloia.myhousek.R
+import it.reloia.myhousek.manage.ui.domain.model.Alarm
 import it.reloia.myhousek.tasks.domain.model.Task
 import kotlinx.coroutines.launch
 
@@ -52,7 +58,10 @@ fun WidgetScreen(context: Context, id: GlanceId) {
     val coroutineScope = rememberCoroutineScope()
 
 //    TODO: remove boilerplate
-    var alarms: List<Task> = emptyList()
+    var alarms: List<Alarm> = listOf(
+        Alarm("alarm_1", "Alarm 1", "alarm_1"),
+        Alarm("alarm_2", "Alarm 2", "alarm_2"),
+    )
 
     Scaffold (
         titleBar = {
@@ -75,64 +84,55 @@ fun WidgetScreen(context: Context, id: GlanceId) {
                     .clickable(actionStartActivity<MainActivity>())
             )
         },
+        horizontalPadding = 8.dp,
         backgroundColor = GlanceTheme.colors.widgetBackground
     ) {
         val columnCount = 2
-        val rowCount: Int = alarms.size / columnCount
+//        val rowCount: Int = alarms.size / columnCount
         LazyColumn (
             modifier = GlanceModifier
-                .fillMaxSize()
-                .background(Color(0xFF000000))
+                .fillMaxHeight()
         ) {
-            println("$rowCount $columnCount")
-//            (0..<rowCount.toInt()).map { c ->
+//            println("$rowCount $columnCount")
+//            items( rowCount ) { row ->
+//                val index = row * columnCount
 //                Row (
 //                    modifier = GlanceModifier
 //                        .height(100.dp)
 //                        .padding(8.dp),
 //                ) {
-//                    (0..<columnCount.toInt()).map { r ->
-//                        println("col: ${r + c * columnCount.toInt()}")
-//                        Box (
-//                            modifier = GlanceModifier
-//                                .height(100.dp)
-//                                .width(100.dp)
-//                                .padding(8.dp)
-//                                .background(GlanceTheme.colors.surface)
-//                        ) {
-//                            Text(
-//                                text = "Alarm ${r + c * columnCount.toInt()}",
-//                                style = TextStyle(
-//                                    fontSize = 16.sp,
-//                                    fontWeight = FontWeight.Bold
-//                                )
-//                            )
-//                        }
-//                    }
+//
 //                }
 //            }
-            items(rowCount.toInt()) {
+            val chunked = alarms.chunked(columnCount)
+            items( chunked.size ) {
+                val row = chunked[it]
                 Row (
                     modifier = GlanceModifier
+                        .fillMaxWidth()
                         .height(100.dp)
                         .padding(8.dp),
+                    horizontalAlignment = Alignment.Horizontal.CenterHorizontally
                 ) {
-                    (0 until columnCount.toInt()).map { r ->
-                        println("col: ${r + it * columnCount.toInt()}")
+                    row.forEach { alarm ->
                         Box (
                             modifier = GlanceModifier
-                                .height(100.dp)
-                                .width(100.dp)
+                                .width(80.dp)
+                                .height(80.dp)
+                                .cornerRadius(8.dp)
+                                .background(Color(0xFF0000FF))
                                 .padding(8.dp)
-                                .background(GlanceTheme.colors.surface)
                         ) {
                             Text(
-                                text = "Alarm ${r + it * columnCount.toInt()}",
+                                text = alarm.name,
                                 style = TextStyle(
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold
                                 )
                             )
+                        }
+                        if (row.indexOf(alarm) != row.size - 1) {
+                            Spacer(modifier = GlanceModifier.width(8.dp))
                         }
                     }
                 }

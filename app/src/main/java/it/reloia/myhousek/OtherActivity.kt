@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import it.reloia.myhousek.profile.data.remote.ProfileApiService
 import it.reloia.myhousek.profile.data.remote.RemoteProfileRepositoryImpl
+import it.reloia.myhousek.profile.ui.LoginScreen
 import it.reloia.myhousek.profile.ui.ProfileAppBar
 import it.reloia.myhousek.profile.ui.ProfileScreen
 import it.reloia.myhousek.profile.ui.ProfileViewModel
@@ -64,9 +65,7 @@ class OtherActivity : ComponentActivity() {
                 Page(
                   "Login",
                     "login",
-                    content = {
-                        Text("Login")
-                    },
+                    content = { LoginScreen() },
                     topBar = {}
                 ),
                 Page(
