@@ -1,5 +1,7 @@
 package it.reloia.myhousek
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -52,6 +54,8 @@ import androidx.navigation.compose.rememberNavController
 import it.reloia.myhousek.home.ui.HomeScreen
 import it.reloia.myhousek.manage.ui.ManageScreen
 import it.reloia.myhousek.home.ui.HomeAppBar
+import it.reloia.myhousek.profile.data.remote.ProfileApiService
+import it.reloia.myhousek.profile.data.remote.RemoteProfileRepositoryImpl
 import it.reloia.myhousek.profile.ui.ProfileViewModel
 import it.reloia.myhousek.tasks.data.remote.TasksApiService
 import it.reloia.myhousek.tasks.data.remote.TasksRepositoryImpl
@@ -75,17 +79,49 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val loggedIn: Boolean = getSharedPreferences("it.reloia.myhousek.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+            .getBoolean("loggedIn", false)
+
+        if (!loggedIn) {
+            val intent = Intent(this, OtherActivity::class.java)
+            intent.putExtra("page", "profile")
+
+            startActivity(intent)
+            return@onCreate
+        }
+
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
             /* TODO: replace with actual image */
             val profileImage = null;
-            val profileViewModel = ProfileViewModel()
-            /*tasks*/
+            val profileViewModel = ProfileViewModel(
+                RemoteProfileRepositoryImpl(
+                    Retrofit.Builder()
+                        .baseUrl("https://myhousek-api.onrender.com")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build()
+                        .create(ProfileApiService::class.java),
+                    this.application
+                )
+            )
+            val loginToken: String = getSharedPreferences("myhousek", Context.MODE_PRIVATE)
+                .getString("token", "").toString()
+
+            if (loginToken.isBlank()) {
+                println("No token found")
+                val intent = Intent(this, OtherActivity::class.java)
+                intent.putExtra("page", "login")
+
+                startActivity(intent)
+                return@setContent
+            }
+
             val httpClient = OkHttpClient.Builder()
                 .addInterceptor {
                     val request = it.request().newBuilder()
-                        .addHeader("Authorization", "Bearer ${profileViewModel.token}")
+                        .addHeader("Authorization", "Bearer $loginToken")
                         .build()
                     it.proceed(request)
                 }

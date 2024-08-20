@@ -54,13 +54,7 @@ fun HomeAppBar(userViewModel: ProfileViewModel, navController: NavController) {
                 }
             ) {
                 Image(
-                    painter = if (user?.profileImageUrl != null) {
-                        /*todo*/
-                        painterResource(id = R.drawable.baseline_account_circle_24)
-                        /*painterResource(id = R.drawable.user_profile_image) // Replace with actual image*/
-                    } else {
-                        painterResource(id = R.drawable.baseline_account_circle_24) // Replace with default image
-                    },
+                    painter = painterResource(id = R.drawable.baseline_account_circle_24),
                     contentDescription = "Profile Picture",
                     modifier = Modifier
                         .size(32.dp)

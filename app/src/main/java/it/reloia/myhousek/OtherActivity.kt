@@ -18,12 +18,16 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import it.reloia.myhousek.profile.data.remote.ProfileApiService
+import it.reloia.myhousek.profile.data.remote.RemoteProfileRepositoryImpl
 import it.reloia.myhousek.profile.ui.ProfileAppBar
 import it.reloia.myhousek.profile.ui.ProfileScreen
 import it.reloia.myhousek.profile.ui.ProfileViewModel
 import it.reloia.myhousek.settings.ui.SettingsAppBar
 import it.reloia.myhousek.settings.ui.SettingsScreen
 import it.reloia.myhousek.ui.theme.MyhouseKTheme
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 data class Page(
     val name: String,
@@ -38,7 +42,16 @@ class OtherActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var profileViewModel: ProfileViewModel = ProfileViewModel()
+            val profileViewModel: ProfileViewModel = ProfileViewModel(
+                RemoteProfileRepositoryImpl(
+                    Retrofit.Builder()
+                        .baseUrl("https://myhousek-api.onrender.com")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build()
+                        .create(ProfileApiService::class.java),
+                    this.application
+                )
+            )
 
             val page = intent.getStringExtra("page")
             val pages = listOf(
@@ -49,6 +62,14 @@ class OtherActivity : ComponentActivity() {
                     content = { ProfileScreen(profileViewModel = profileViewModel) },
                     topBar = { ProfileAppBar(profileViewModel = profileViewModel) }),
                 Page(
+                  "Login",
+                    "login",
+                    content = {
+                        Text("Login")
+                    },
+                    topBar = {}
+                ),
+                Page(
                     "test",
                     "test",
                     content = {
@@ -56,6 +77,7 @@ class OtherActivity : ComponentActivity() {
                     }
                 )
             )
+            println("Page: $page")
             val selectedPage = pages.first { it.route == page }
 
             MyhouseKTheme {
