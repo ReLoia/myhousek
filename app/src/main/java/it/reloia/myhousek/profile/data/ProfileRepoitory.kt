@@ -4,5 +4,6 @@ import it.reloia.myhousek.profile.domain.model.User
 
 interface ProfileRepository {
     suspend fun getUserProfile(userId: String): User?
-    suspend fun updateUserProfile(user: User): Boolean
+    suspend fun login(username: String, password: String): Boolean
+    suspend fun register(username: String, password: String): Boolean
 }
