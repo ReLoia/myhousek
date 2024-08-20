@@ -74,6 +74,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
+//    Datastore Preferences
+    implementation(libs.datastore.preferences)
 
 //    Glance
     implementation(libs.androidx.glance)

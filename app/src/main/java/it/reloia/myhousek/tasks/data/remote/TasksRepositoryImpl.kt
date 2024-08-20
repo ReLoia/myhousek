@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class TasksRepositoryImpl (
-    private val tasksApi: TasksApiService,
+    private val apiService: TasksApiService,
     private val appContext: Application
 ) : TasksRepository {
 
@@ -19,31 +19,31 @@ class TasksRepositoryImpl (
 
     override suspend fun getTasks(): List<Task> {
         return withContext(Dispatchers.IO) {
-            tasksApi.getTasks()
+            apiService.getTasks()
         }
     }
 
     override suspend fun addTask(task: CreateTask) {
         withContext(Dispatchers.IO) {
-            tasksApi.addTask(task)
+            apiService.addTask(task)
         }
     }
 
     override suspend fun deleteTask(id: String) {
         withContext(Dispatchers.IO) {
-            tasksApi.deleteTask(id)
+            apiService.deleteTask(id)
         }
     }
 
     override suspend fun updateTask(id: String) {
         withContext(Dispatchers.IO) {
-            tasksApi.updateTask(id)
+            apiService.updateTask(id)
         }
     }
 
     override suspend fun toggleTask(id: String) {
         withContext(Dispatchers.IO) {
-            tasksApi.toggleTask(id)
+            apiService.toggleTask(id)
         }
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import it.reloia.myhousek.tasks.data.TasksRepository
 import it.reloia.myhousek.tasks.domain.model.CreateTask
 import it.reloia.myhousek.tasks.domain.model.Task
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ class TasksViewModel (
     }
 
     fun loadTasks() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _tasks.value = repository.getTasks()
         }
     }

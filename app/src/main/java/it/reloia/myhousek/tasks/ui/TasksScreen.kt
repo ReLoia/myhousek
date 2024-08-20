@@ -45,17 +45,20 @@ fun TasksScreen(viewModel: TasksViewModel, modifier: Modifier = Modifier) {
             selectedTabIndex = pagerState.currentPage,
 
             ) {
-            tabs.forEachIndexed { index, title ->
-                Tab(
-                    text = { Text(title) },
-                    selected = pagerState.currentPage == index,
-                    onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(index)
-                        }
+            when (tasks) {
+                emptyList<Task>() -> Text("Non ci sono robi")
+                else -> tabs.forEachIndexed { index, title ->
+                    Tab(
+                        text = { Text(title) },
+                        selected = pagerState.currentPage == index,
+                        onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
 
-                    },
-                )
+                        },
+                    )
+                }
             }
         }
 
