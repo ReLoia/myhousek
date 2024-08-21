@@ -2,8 +2,12 @@ package it.reloia.myhousek.widgets.alarms
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
@@ -11,9 +15,11 @@ import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
+import androidx.glance.LocalSize
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.components.CircleIconButton
 import androidx.glance.appwidget.components.Scaffold
 import androidx.glance.appwidget.components.TitleBar
@@ -41,6 +47,23 @@ import it.reloia.myhousek.tasks.domain.model.Task
 import kotlinx.coroutines.launch
 
 class AlarmsWidget : GlanceAppWidget() {
+    companion object {
+        val SMALL_SIZE = DpSize(100.dp, 100.dp)
+        val MEDIUM_SIZE = DpSize(220.dp, 100.dp)
+        val BIG_SIZE = DpSize(340.dp, 100.dp)
+    }
+
+    override val sizeMode: SizeMode = SizeMode.Responsive(
+        setOf(
+            SMALL_SIZE,
+            MEDIUM_SIZE,
+            BIG_SIZE
+        )
+    )
+
+//    override val sizeMode: SizeMode = SizeMode.Exact
+
+
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
             GlanceTheme {
@@ -56,11 +79,14 @@ class AlarmsWidget : GlanceAppWidget() {
 @Composable
 fun WidgetScreen(context: Context, id: GlanceId) {
     val coroutineScope = rememberCoroutineScope()
+    val size = LocalSize.current
+    println(size)
 
 //    TODO: remove boilerplate
-    var alarms: List<Alarm> = listOf(
+    val alarms: List<Alarm> = listOf(
         Alarm("alarm_1", "Alarm 1", "alarm_1"),
         Alarm("alarm_2", "Alarm 2", "alarm_2"),
+        Alarm("alarm_3", "Alarm 3", "alarm_3"),
     )
 
     Scaffold (
@@ -87,40 +113,43 @@ fun WidgetScreen(context: Context, id: GlanceId) {
         horizontalPadding = 8.dp,
         backgroundColor = GlanceTheme.colors.widgetBackground
     ) {
-        val columnCount = 2
+        val columnCount = when (size) {
+            AlarmsWidget.SMALL_SIZE -> 1
+            AlarmsWidget.MEDIUM_SIZE -> 2
+            AlarmsWidget.BIG_SIZE -> 3
+            else -> 2
+        }
 //        val rowCount: Int = alarms.size / columnCount
+        Text(text = "Size ${size.width}x${size.height}")
+//        return@Scaffold
         LazyColumn (
             modifier = GlanceModifier
                 .fillMaxHeight()
         ) {
-//            println("$rowCount $columnCount")
-//            items( rowCount ) { row ->
-//                val index = row * columnCount
-//                Row (
-//                    modifier = GlanceModifier
-//                        .height(100.dp)
-//                        .padding(8.dp),
-//                ) {
-//
-//                }
-//            }
             val chunked = alarms.chunked(columnCount)
+//            var size by remember { mutableStateOf(IntSize.Zero) }
             items( chunked.size ) {
                 val row = chunked[it]
                 Row (
                     modifier = GlanceModifier
                         .fillMaxWidth()
-                        .height(100.dp)
-                        .padding(8.dp),
+                        .height(83.dp),
                     horizontalAlignment = Alignment.Horizontal.CenterHorizontally
                 ) {
                     row.forEach { alarm ->
+
+                        val boxModifier = when (size) {
+                            AlarmsWidget.SMALL_SIZE -> GlanceModifier.fillMaxWidth()
+                            AlarmsWidget.MEDIUM_SIZE, AlarmsWidget.BIG_SIZE -> GlanceModifier.defaultWeight()
+                            else -> GlanceModifier.width(80.dp)
+                        }
+
                         Box (
-                            modifier = GlanceModifier
-                                .width(80.dp)
-                                .height(80.dp)
+                            modifier = boxModifier
+                                .height(75.dp)
                                 .cornerRadius(8.dp)
                                 .background(Color(0xFF0000FF))
+//                                .fillMaxWidth()
                                 .padding(8.dp)
                         ) {
                             Text(

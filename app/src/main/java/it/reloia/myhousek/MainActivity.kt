@@ -83,13 +83,13 @@ class MainActivity : ComponentActivity() {
         val loggedIn: Boolean = getSharedPreferences("it.reloia.myhousek.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
             .getBoolean("loggedIn", false)
 
-//        if (!loggedIn) {
-//            val intent = Intent(this, OtherActivity::class.java)
-//            intent.putExtra("page", "login")
-//
-//            startActivity(intent)
-//            return@onCreate
-//        }
+        if (!loggedIn) {
+            val intent = Intent(this, OtherActivity::class.java)
+            intent.putExtra("page", "login")
+
+            startActivity(intent)
+            return@onCreate
+        }
 
         enableEdgeToEdge()
         setContent {
@@ -109,14 +109,14 @@ class MainActivity : ComponentActivity() {
             val loginToken: String = getSharedPreferences("myhousek", Context.MODE_PRIVATE)
                 .getString("token", "").toString()
 
-//            if (loginToken.isBlank()) {
-//                println("No token found")
-//                val intent = Intent(this, OtherActivity::class.java)
-//                intent.putExtra("page", "login")
-//
-//                startActivity(intent)
-//                return@setContent
-//            }
+            if (loginToken.isBlank()) {
+                println("No token found")
+                val intent = Intent(this, OtherActivity::class.java)
+                intent.putExtra("page", "login")
+
+                startActivity(intent)
+                return@setContent
+            }
 
             val httpClient = OkHttpClient.Builder()
                 .addInterceptor {
