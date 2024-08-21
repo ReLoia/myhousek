@@ -1,13 +1,12 @@
-package it.reloia.myhousek.widgets.alarms
+package it.reloia.myhousek.alarm.ui.widget
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
@@ -32,7 +31,6 @@ import androidx.glance.layout.Box
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxHeight
-import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
@@ -42,9 +40,14 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import it.reloia.myhousek.MainActivity
 import it.reloia.myhousek.R
-import it.reloia.myhousek.manage.ui.domain.model.Alarm
-import it.reloia.myhousek.tasks.domain.model.Task
+import it.reloia.myhousek.alarm.data.AlarmsRepository
+import it.reloia.myhousek.alarm.data.remote.AlarmsApiService
+import it.reloia.myhousek.alarm.data.remote.AlarmsRepositoryImpl
+import it.reloia.myhousek.alarm.domain.model.Alarm
+import it.reloia.myhousek.alarm.ui.AlarmsViewModel
 import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class AlarmsWidget : GlanceAppWidget() {
     companion object {
@@ -60,9 +63,6 @@ class AlarmsWidget : GlanceAppWidget() {
             BIG_SIZE
         )
     )
-
-//    override val sizeMode: SizeMode = SizeMode.Exact
-
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
@@ -80,14 +80,19 @@ class AlarmsWidget : GlanceAppWidget() {
 fun WidgetScreen(context: Context, id: GlanceId) {
     val coroutineScope = rememberCoroutineScope()
     val size = LocalSize.current
-    println(size)
+
+    val alarmsViewModel = AlarmsViewModel(
+        repository = AlarmsRepositoryImpl(
+            alarmsApiService = Retrofit.Builder()
+                .baseUrl("https://myhousek-api.onrender.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(AlarmsApiService::class.java)
+        )
+    )
 
 //    TODO: remove boilerplate
-    val alarms: List<Alarm> = listOf(
-        Alarm("alarm_1", "Alarm 1", "alarm_1"),
-        Alarm("alarm_2", "Alarm 2", "alarm_2"),
-        Alarm("alarm_3", "Alarm 3", "alarm_3"),
-    )
+    val alarms: List<Alarm> by alarmsViewModel.alarms.collectAsState(emptyList())
 
     Scaffold (
         titleBar = {
@@ -119,15 +124,11 @@ fun WidgetScreen(context: Context, id: GlanceId) {
             AlarmsWidget.BIG_SIZE -> 3
             else -> 2
         }
-//        val rowCount: Int = alarms.size / columnCount
-        Text(text = "Size ${size.width}x${size.height}")
-//        return@Scaffold
         LazyColumn (
             modifier = GlanceModifier
                 .fillMaxHeight()
         ) {
             val chunked = alarms.chunked(columnCount)
-//            var size by remember { mutableStateOf(IntSize.Zero) }
             items( chunked.size ) {
                 val row = chunked[it]
                 Row (
@@ -149,7 +150,6 @@ fun WidgetScreen(context: Context, id: GlanceId) {
                                 .height(75.dp)
                                 .cornerRadius(8.dp)
                                 .background(Color(0xFF0000FF))
-//                                .fillMaxWidth()
                                 .padding(8.dp)
                         ) {
                             Text(

@@ -1,4 +1,4 @@
-package it.reloia.myhousek.widgets.alarms
+package it.reloia.myhousek.alarm.ui.widget
 
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver

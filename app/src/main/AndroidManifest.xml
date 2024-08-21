@@ -35,7 +35,7 @@
         </activity>
 
         <receiver
-            android:name=".widgets.alarms.AlarmsWidgetReceiver"
+            android:name=".alarm.ui.widget.AlarmsWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

@@ -1,4 +1,4 @@
-package it.reloia.myhousek.manage.ui.domain.model
+package it.reloia.myhousek.manage.domain.model
 
 data class Command (
     val id: String,
