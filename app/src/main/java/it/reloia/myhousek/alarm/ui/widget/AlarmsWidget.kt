@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,6 +30,7 @@ import androidx.glance.layout.Box
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxHeight
+import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
@@ -40,7 +40,6 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import it.reloia.myhousek.MainActivity
 import it.reloia.myhousek.R
-import it.reloia.myhousek.alarm.data.AlarmsRepository
 import it.reloia.myhousek.alarm.data.remote.AlarmsApiService
 import it.reloia.myhousek.alarm.data.remote.AlarmsRepositoryImpl
 import it.reloia.myhousek.alarm.domain.model.Alarm
@@ -81,7 +80,7 @@ fun WidgetScreen(context: Context, id: GlanceId) {
     val coroutineScope = rememberCoroutineScope()
     val size = LocalSize.current
 
-    val alarmsViewModel = AlarmsViewModel(
+    val alarmsViewModel: AlarmsViewModel = AlarmsViewModel(
         repository = AlarmsRepositoryImpl(
             alarmsApiService = Retrofit.Builder()
                 .baseUrl("https://myhousek-api.onrender.com")
@@ -91,8 +90,15 @@ fun WidgetScreen(context: Context, id: GlanceId) {
         )
     )
 
-//    TODO: remove boilerplate
     val alarms: List<Alarm> by alarmsViewModel.alarms.collectAsState(emptyList())
+    try {
+        alarmsViewModel.loadAlarms()
+    } catch (e: Exception) {
+        println("Error in resonance")
+        e.printStackTrace()
+        ErrorScreen()
+        return
+    }
 
     Scaffold (
         titleBar = {
@@ -124,6 +130,7 @@ fun WidgetScreen(context: Context, id: GlanceId) {
             AlarmsWidget.BIG_SIZE -> 3
             else -> 2
         }
+        if (alarms.isEmpty()) Text(text = stringResource(R.string.loading))
         LazyColumn (
             modifier = GlanceModifier
                 .fillMaxHeight()
@@ -149,7 +156,7 @@ fun WidgetScreen(context: Context, id: GlanceId) {
                             modifier = boxModifier
                                 .height(75.dp)
                                 .cornerRadius(8.dp)
-                                .background(Color(0xFF0000FF))
+                                .background(GlanceTheme.colors.primary)
                                 .padding(8.dp)
                         ) {
                             Text(
@@ -169,6 +176,23 @@ fun WidgetScreen(context: Context, id: GlanceId) {
         }
 
 
+    }
+}
+
+@Composable
+fun ErrorScreen(modifier: GlanceModifier = GlanceModifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Error",
+            style = TextStyle(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        )
     }
 }
 

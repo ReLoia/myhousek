@@ -9,4 +9,5 @@
     <string name="settings">Impostazioni</string>
     <string name="alarms_widget_description">Widget per la gestione degli Allarmi</string>
     <string name="manage_the_alarms">Gestisci gli allarmi</string>
+    <string name="refresh">Riavvia</string>
 </resources>

@@ -80,8 +80,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val loggedIn: Boolean = getSharedPreferences("it.reloia.myhousek.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
-            .getBoolean("loggedIn", false)
+        val loggedIn: Boolean =
+            getSharedPreferences("it.reloia.myhousek.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+                .getBoolean("loggedIn", false)
 
         if (!loggedIn) {
             val intent = Intent(this, OtherActivity::class.java)
@@ -327,7 +328,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(padding),
-                            ) {
+                        ) {
                             NavHost(
                                 navController = navController,
                                 startDestination = "home",
@@ -341,7 +342,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                                 composable("tasks") {
-                                    TasksScreen( tasksViewModel )
+                                    TasksScreen(tasksViewModel)
                                 }
                                 composable("manage") {
                                     ManageScreen()

@@ -56,14 +56,18 @@ class OtherActivity : ComponentActivity() {
 
             val page = intent.getStringExtra("page")
             val pages = listOf(
-                Page(stringResource(R.string.settings), "settings", content = { SettingsScreen() }, topBar = { SettingsAppBar() }),
+                Page(
+                    stringResource(R.string.settings),
+                    "settings",
+                    content = { SettingsScreen() },
+                    topBar = { SettingsAppBar() }),
                 Page(
                     stringResource(R.string.profile),
                     "profile",
                     content = { ProfileScreen(profileViewModel = profileViewModel) },
                     topBar = { ProfileAppBar(profileViewModel = profileViewModel) }),
                 Page(
-                  "Login",
+                    "Login",
                     "login",
                     content = { LoginScreen() },
                     topBar = {}

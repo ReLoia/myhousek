@@ -9,19 +9,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class AlarmsViewModel (
+class AlarmsViewModel(
     private val repository: AlarmsRepository
-): ViewModel() {
+) : ViewModel() {
     private val _alarms = MutableStateFlow<List<Alarm>>(emptyList())
     val alarms: StateFlow<List<Alarm>> = _alarms
 
-    init {
-        loadAlarms()
-    }
-
     fun loadAlarms() {
         viewModelScope.launch(Dispatchers.IO) {
-            _alarms.value = repository.getAlarms()
+            try {
+                _alarms.value = repository.getAlarms()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _alarms.value = emptyList()
+            }
         }
     }
 
