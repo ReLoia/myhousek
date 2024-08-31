@@ -5,5 +5,6 @@ data class User(
     /**
      * The ids of the tasks that the user has done
      */
-    val tasksDone: List<String>
+    val tasksDone: List<String>,
+    val access_token: String
 )

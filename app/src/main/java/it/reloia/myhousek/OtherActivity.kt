@@ -53,8 +53,7 @@ class OtherActivity : ComponentActivity() {
                         .build()
                         .create(ProfileApiService::class.java),
                     this.application
-                ),
-                LocalContext.current as Application
+                )
             )
 
             val page = intent.getStringExtra("page")
@@ -72,7 +71,7 @@ class OtherActivity : ComponentActivity() {
                 Page(
                     "Login",
                     "login",
-                    content = { LoginScreen() },
+                    content = { LoginScreen(profileViewModel = profileViewModel) },
                     topBar = {}
                 ),
                 Page(

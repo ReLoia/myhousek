@@ -1,15 +1,11 @@
 package it.reloia.myhousek.profile.ui
 
-import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -22,30 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.glance.LocalContext
-import it.reloia.myhousek.profile.data.remote.ProfileApiService
-import it.reloia.myhousek.profile.data.remote.RemoteProfileRepositoryImpl
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
-    val profileViewModel: ProfileViewModel = ProfileViewModel(
-        RemoteProfileRepositoryImpl(
-            Retrofit.Builder()
-                .baseUrl("https://myhousek-api.onrender.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(ProfileApiService::class.java),
-            LocalContext.current as Application
-        ),
-        LocalContext.current as Application
-    )
-
-
-
-    Column (
+fun LoginScreen(modifier: Modifier = Modifier, profileViewModel: ProfileViewModel) {
+    Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = modifier
@@ -53,11 +30,13 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     ) {
         Spacer(modifier = Modifier.weight(1f))
 
-        Text("Login",
+        Text(
+            "Login",
             fontSize = 44.sp,
             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
         )
-        Text(text = "to access the app",
+        Text(
+            text = "to access the app",
             fontSize = 26.sp,
         )
         var username by remember { mutableStateOf("") }
@@ -72,7 +51,10 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(40.dp))
 
         Button(onClick = {
-            val result = profileViewModel.login(username, password)
+            profileViewModel.login(username, password)
+            if (profileViewModel.user.value != null) {
+                println("Logged in")
+            }
         }, modifier = Modifier.width(200.dp)) {
             Text("Login")
         }

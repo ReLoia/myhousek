@@ -10,8 +10,14 @@ class RemoteProfileRepositoryImpl (
     private val apiService: ProfileApiService,
     private val appContext: Application
 ) : ProfileRepository {
-    override suspend fun getUserProfile(userId: String): User? {
-        TODO("Not yet implemented")
+    override suspend fun getUserProfile(): User {
+        val user = apiService.getUserProfile()
+        return user
+    }
+
+    override suspend fun getUserProfile(token: String): User {
+        val user = apiService.getCurrentUser(TokenModel(token, "bearer"))
+        return user
     }
 
     override suspend fun login(username: String, password: String): TokenModel {

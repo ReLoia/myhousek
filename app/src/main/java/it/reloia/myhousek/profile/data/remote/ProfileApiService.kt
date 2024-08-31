@@ -12,6 +12,9 @@ interface ProfileApiService {
     @GET("user")
     suspend fun getUserProfile(): User
 
+    @POST("user")
+    suspend fun getCurrentUser(@Body tokenModel: TokenModel): User
+
     @POST("login")
     suspend fun login(@Body userLogin: UserLogin): TokenModel
 
