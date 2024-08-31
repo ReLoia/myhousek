@@ -1,5 +1,6 @@
 package it.reloia.myhousek
 
+import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,6 +19,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.glance.LocalContext
 import it.reloia.myhousek.profile.data.remote.ProfileApiService
 import it.reloia.myhousek.profile.data.remote.RemoteProfileRepositoryImpl
 import it.reloia.myhousek.profile.ui.LoginScreen
@@ -51,7 +53,8 @@ class OtherActivity : ComponentActivity() {
                         .build()
                         .create(ProfileApiService::class.java),
                     this.application
-                )
+                ),
+                LocalContext.current as Application
             )
 
             val page = intent.getStringExtra("page")
@@ -88,7 +91,7 @@ class OtherActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
                         if (selectedPage.topBar != null) {
-                            selectedPage.topBar?.invoke()
+                            selectedPage.topBar.invoke()
                         } else {
                             TopAppBar(
                                 title = { Text(selectedPage.name) },
@@ -104,29 +107,6 @@ class OtherActivity : ComponentActivity() {
                                 }
                             )
                         }
-//                        when (page) {
-//                            "profile" -> {
-//                                selectedPage.topBar()
-//                            }
-//                            "settings" -> {
-//
-//                            }
-//                            else -> {
-//                                TopAppBar(
-//                                    title = { Text(selectedPage.name) },
-//                                    navigationIcon = {
-//                                        IconButton(onClick = {
-//                                            finish()
-//                                        }) {
-//                                            Icon(
-//                                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-//                                                contentDescription = "Back"
-//                                            )
-//                                        }
-//                                    }
-//                                )
-//                            }
-//                        }
                     }
                 ) { padding ->
                     Surface(

@@ -1,5 +1,6 @@
 package it.reloia.myhousek.profile.ui
 
+import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,10 +22,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.glance.LocalContext
+import it.reloia.myhousek.profile.data.remote.ProfileApiService
+import it.reloia.myhousek.profile.data.remote.RemoteProfileRepositoryImpl
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
+    val profileViewModel: ProfileViewModel = ProfileViewModel(
+        RemoteProfileRepositoryImpl(
+            Retrofit.Builder()
+                .baseUrl("https://myhousek-api.onrender.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(ProfileApiService::class.java),
+            LocalContext.current as Application
+        ),
+        LocalContext.current as Application
+    )
+
+
+
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -51,7 +71,9 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        Button(onClick = { /*TODO*/ }, modifier = Modifier.width(200.dp)) {
+        Button(onClick = {
+            val result = profileViewModel.login(username, password)
+        }, modifier = Modifier.width(200.dp)) {
             Text("Login")
         }
 
