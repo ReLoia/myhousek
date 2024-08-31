@@ -10,4 +10,9 @@
     <string name="alarms_widget_description">Widget per la gestione degli Allarmi</string>
     <string name="manage_the_alarms">Gestisci gli allarmi</string>
     <string name="refresh">Riavvia</string>
+    <string name="loading">Caricamento...</string>
+    <string name="hide_password">Nascondi password</string>
+    <string name="show_password">Mostra password</string>
+    <string name="login">Accedi</string>
+    <string name="username">Nome utente</string>
 </resources>

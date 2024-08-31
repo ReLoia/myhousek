@@ -87,6 +87,7 @@ class MainActivity : ComponentActivity() {
         if (!loggedIn) {
             val intent = Intent(this, OtherActivity::class.java)
             intent.putExtra("page", "login")
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
             startActivity(intent)
             return@onCreate
