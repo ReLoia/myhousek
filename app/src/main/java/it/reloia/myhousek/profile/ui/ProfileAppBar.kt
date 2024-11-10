@@ -32,8 +32,8 @@ fun ProfileAppBar(
         },
         actions = {
             IconButton(onClick = {
-//                    coroutineScope.launch {
-//                    }
+                profileViewModel.logout(context)
+                (context as? Activity)?.finish()
             }) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.baseline_logout_24),

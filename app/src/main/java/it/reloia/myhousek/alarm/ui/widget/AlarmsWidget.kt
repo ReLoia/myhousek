@@ -83,7 +83,7 @@ fun WidgetScreen(context: Context, id: GlanceId) {
     val alarmsViewModel: AlarmsViewModel = AlarmsViewModel(
         repository = AlarmsRepositoryImpl(
             alarmsApiService = Retrofit.Builder()
-                .baseUrl("https://myhousek-api.onrender.com")
+                .baseUrl("https://reloia.ddns.net/myhousek/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(AlarmsApiService::class.java)

@@ -45,10 +45,11 @@ class OtherActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val profileViewModel: ProfileViewModel = ProfileViewModel(
+            val profileViewModel = ProfileViewModel(
                 RemoteProfileRepositoryImpl(
                     Retrofit.Builder()
-                        .baseUrl("https://myhousek-api.onrender.com")
+                        .baseUrl("https://reloia.ddns.net/myhousek/api/")
+//                        .baseUrl("http://10.0.2.2:8000")
                         .addConverterFactory(GsonConverterFactory.create())
                         .build()
                         .create(ProfileApiService::class.java),
@@ -74,6 +75,7 @@ class OtherActivity : ComponentActivity() {
                     content = { LoginScreen(profileViewModel = profileViewModel) },
                     topBar = {}
                 ),
+//                TODO: remove
                 Page(
                     "test",
                     "test",

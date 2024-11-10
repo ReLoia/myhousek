@@ -7,5 +7,5 @@ interface ProfileRepository {
     suspend fun getUserProfile(): User?
     suspend fun getUserProfile(token: String): User?
     suspend fun login(username: String, password: String): TokenModel
-    suspend fun register(username: String, password: String): Boolean
+    suspend fun register(username: String, password: String): TokenModel
 }

@@ -1,5 +1,7 @@
 package it.reloia.myhousek.profile.ui
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +18,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,12 +27,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import it.reloia.myhousek.MainActivity
 import it.reloia.myhousek.R
 
 
@@ -88,13 +94,40 @@ fun LoginScreen(modifier: Modifier = Modifier, profileViewModel: ProfileViewMode
 
         Spacer(modifier = Modifier.height(40.dp))
 
+        val ctx: Context = LocalContext.current
+
         Button(onClick = {
-            profileViewModel.login(username, password)
-            if (profileViewModel.user.value != null) {
-                println("Logged in")
+            if (username.isEmpty() || password.isEmpty()) {
+                return@Button
             }
+            profileViewModel.login(username, password)
         }, modifier = Modifier.width(200.dp)) {
             Text(stringResource(R.string.login))
+        }
+
+        val user = profileViewModel.user.collectAsState().value
+        LaunchedEffect(user) {
+            user?.let {
+                ctx.getSharedPreferences("it.reloia.myhousek.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+                    .edit()
+                    .putString("token", it.accessToken)
+                    .putBoolean("loggedIn", true)
+                    .apply()
+
+                val intent = Intent(ctx, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                ctx.startActivity(intent)
+            }
+        }
+
+        val errorMessage by profileViewModel.errorMessage.collectAsState()
+        LaunchedEffect(errorMessage) {
+            errorMessage?.let {
+//                TODO: remove this and make it a snackbar
+                if (errorMessage == "Login failed: Not Found") {
+                    profileViewModel.register(username, password)
+                }
+            }
         }
 
         Spacer(modifier = Modifier.weight(1f))

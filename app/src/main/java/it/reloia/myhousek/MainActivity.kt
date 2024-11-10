@@ -76,20 +76,33 @@ data class NavBarItem(
 )
 
 class MainActivity : ComponentActivity() {
+    override fun onResume() {
+        super.onResume()
+        if (!getSharedPreferences("it.reloia.myhousek.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+                .getBoolean("loggedIn", false)
+        ) {
+            val loginIntent = Intent(this, OtherActivity::class.java).apply {
+                putExtra("page", "login")
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            startActivity(loginIntent)
+        }
+    }
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val loginIntent = Intent(this, OtherActivity::class.java).apply {
+            putExtra("page", "login")
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
 
         val loggedIn: Boolean =
             getSharedPreferences("it.reloia.myhousek.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
                 .getBoolean("loggedIn", false)
 
         if (!loggedIn) {
-            val intent = Intent(this, OtherActivity::class.java)
-            intent.putExtra("page", "login")
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
-            startActivity(intent)
+            startActivity(loginIntent)
             return@onCreate
         }
 
@@ -101,22 +114,19 @@ class MainActivity : ComponentActivity() {
             val profileViewModel = ProfileViewModel(
                 RemoteProfileRepositoryImpl(
                     Retrofit.Builder()
-                        .baseUrl("https://myhousek-api.onrender.com")
+                        .baseUrl("https://reloia.ddns.net/myhousek/api/")
+//                        .baseUrl("http://10.0.2.2:8000")
                         .addConverterFactory(GsonConverterFactory.create())
                         .build()
                         .create(ProfileApiService::class.java),
                     this.application
                 )
             )
-            val loginToken: String = getSharedPreferences("myhousek", Context.MODE_PRIVATE)
+            val loginToken: String = getSharedPreferences("it.reloia.myhousek.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
                 .getString("token", "").toString()
 
             if (loginToken.isBlank()) {
-                println("No token found")
-                val intent = Intent(this, OtherActivity::class.java)
-                intent.putExtra("page", "login")
-
-                startActivity(intent)
+                startActivity(loginIntent)
                 return@setContent
             }
 
@@ -131,8 +141,10 @@ class MainActivity : ComponentActivity() {
             val tasksViewModel = TasksViewModel(
                 TasksRepositoryImpl(
                     Retrofit.Builder()
-                        .baseUrl("https://myhousek-api.onrender.com")
+                        .baseUrl("https://reloia.ddns.net/myhousek/api/")
+//                        .baseUrl("http://10.0.2.2:8000")
                         .addConverterFactory(GsonConverterFactory.create())
+                        .client(httpClient.build())
                         .build()
                         .create(TasksApiService::class.java),
                     this.application
@@ -270,18 +282,19 @@ class MainActivity : ComponentActivity() {
                                         Text(text = "Create a new task", fontSize = 20.sp)
 
                                         AssistChip(onClick = {
-                                            if (newTaskTitle != "" && newTaskDescription != "")
+                                            if (newTaskTitle != "" && newTaskDescription != "") {
                                                 tasksViewModel.addTask(
                                                     newTaskTitle,
                                                     newTaskDescription,
                                                     newTaskAssignedUsers.split(",")
                                                 )
+                                                coroutineScope.launch {
+                                                    modalBottomSheetState.hide()
+                                                    openAddTask.value = false
+                                                }
+                                            }
                                             else {
                                                 // TODO:
-                                            }
-                                            coroutineScope.launch {
-                                                modalBottomSheetState.hide()
-                                                openAddTask.value = false
                                             }
                                         }, label = {
                                             Text("Add")
